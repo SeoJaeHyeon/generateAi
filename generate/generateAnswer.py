@@ -1,3 +1,5 @@
+
+
 def run_inference(client,
                   model,
                   file_base64,
@@ -6,17 +8,15 @@ def run_inference(client,
                   history,
                   retrieved_chunks,
                   max_history = 4):
-    """Run inference based on file (image/PDF) and user query."""
     
-       # 서버로 넘길 메시지 구성
-       
-       
-       
+    """사용자 질문에 대해 이미지, pdf 등을 보고 답변"""
+    
+    # 모델에 역할 부여
     system_prompt = '''
     You are an assistant. 
-    When you have a previous conversation and an up-to-date question, it may or may not be related to each other. 
-    If it is relevant, please remember and answer the previous conversation, 
-    and if it is not, ignore the previous conversation and answer it.
+    When you have a previous conversation and an up-to-date question, it may or may not be related to each other.
+    If it is relevant, please refer to the previous conversation and reply,
+    If not, ignore the previous conversation and answer.
     '''
     messages = [{"role": "system", "content": system_prompt}]
     
@@ -42,7 +42,7 @@ def run_inference(client,
     
     
     
-    # 파일 콘텐츠 준비
+    # 파일 타입에 맞춰 프롬프트 생성
     if file_type == "image":
         content = f"data:image/jpeg;base64,{file_base64}"
         messages.append({
@@ -54,9 +54,7 @@ def run_inference(client,
                 ],
             })
         
-    elif file_type == "pdf":
-        content = file_base64  # PDF 텍스트 내용
-        
+    elif file_type == "pdf":        
         messages.append({"role": "user", 
                          "content": f"{question}\n\nFile Content:\n{retrieved_chunks}"})
 

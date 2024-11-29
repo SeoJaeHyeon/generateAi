@@ -19,24 +19,22 @@ client = OpenAI(
 )
 
 models = client.models.list()
-model = models.data[0].id
+model = models.data[0].id                                                       # llava-hf/llava-1.5-7b-hf
 print(f"Using model: {model}")
 
-chunks, sentence_embed_model, index = None, None, None
+chunks, sentence_embed_model, index = None, None, None                          # pdf 내용을 저장할 vectorstore 
+
 
 def generate_response(file, question, history):
-    """Generate a response based on the uploaded file and question."""
+    ''' 질문에 대한 응답을 내는 함수 '''
     
     global chunks, sentence_embed_model, index
     
-    if file is None:
-        chunks, sentence_embed_model, index = None, None, None
-        
+    if file is None:                                                            # 이미지나 pdf 입력이 안된 경우
         file_type = "text"
-        file_base64 = None  # 텍스트만 있을 경우, 파일 내용은 없음
         response = run_inference(client,
                                  model, 
-                                 file_base64,
+                                 None,
                                  question,
                                  file_type,
                                  history,
@@ -44,7 +42,7 @@ def generate_response(file, question, history):
                                  4)
     else:   
         file_type = "image" if file.name.endswith((".jpg", ".jpeg", ".png")) else "pdf"
-        if file_type == "image":
+        if file_type == "image":                                                # 이미지가 입력된 경우
             file_base64 = encode_base64_content_from_file(file.name)
             response = run_inference(client, 
                                      model,
@@ -54,22 +52,25 @@ def generate_response(file, question, history):
                                      history, 
                                      None,
                                      4)
-        elif file_type == "pdf":
-            file_base64 = extract_text_from_pdf(file.name)
+        elif file_type == "pdf":                                                # pdf가 입력된 경우
+            file_base64 = extract_text_from_pdf(file.name)                      # pdf로 부터 텍스트 추출
             if index is None:
                 print("Pdf Text 추출 완료")
-                chunks = chunk_text_with_overlap(text=file_base64)
+                chunks = chunk_text_with_overlap(text=file_base64)              # 추출된 텍스트를 chunk로 분할       
                 print("Pdf text chunking 완료")
-                sentence_embed_model, index = embedding_to_vector_store(chunks=chunks)
+                sentence_embed_model, index = embedding_to_vector_store(chunks=chunks)  # chunk 들을 faiss에 인덱싱
                 
-            retrieved_chunks = retrieve_augmented_generation(chunks=chunks,
+            retrieved_chunks = retrieve_augmented_generation(chunks=chunks,     
                                                              sentence_embed_model=sentence_embed_model,
                                                              index=index,
                                                              question=question,
-                                                             k=3)
+                                                             k=3)                        # faiss로 부터 질문과 유사한 pdf chunks k개 반환
             print("문서에서 질문과 연관된 Top K context 추출 완료")
             print("context :")
-            print(retrieved_chunks)
+            for idx, c in enumerate(retrieved_chunks):
+                print(f"context {idx}")
+                print(c)
+                print()
             print()
             response = run_inference(client, 
                                      model,
@@ -78,37 +79,45 @@ def generate_response(file, question, history):
                                      file_type, 
                                      history,
                                      retrieved_chunks,
-                                     4)
+                                     4)                                                 
 
     history.append((question, ""))
-    words = response.split()  # 응답을 단어별로 나누기
-    for word in words:
-        # 현재 단어를 히스토리에 추가하며 업데이트
-        history[-1] = (question, history[-1][1] + " " + word)
+    words = response.split()                                                    # 응답을 단어별로 나누기(GPT 처럼)
+    for word in words:                                                           
+        history[-1] = (question, history[-1][1] + " " + word)                   # 현재 단어를 히스토리에 추가하며 업데이트
         yield history
-        time.sleep(0.1)  # 단어 출력 간 지연 시간 설정
+        time.sleep(0.1)                                                         # 단어 출력 간 지연 시간 설정
 
+
+def clear_file():
+    """pdf를 삭제하는 경우 vectorstore 초기화."""     
+    global chunks, sentence_embed_model, index
+    chunks, sentence_embed_model, index = None, None, None
+    return None, '<div style="border:1px solid #e0e0e0; padding:10px; height:235px;">PDF Preview</div>' 
     
 # Gradio 인터페이스 구성
 with gr.Blocks() as demo:
-    gr.Markdown("# File Analysis Chatbot (PDF & Image Support)")
+    gr.Markdown("# 생성형 AI 응용 ( RAG System with Open Source - Team D 서재현, 전지훈, 서재연 )")
 
     with gr.Row():
         # 이미지와 PDF를 좌우로 배치
         with gr.Column():
             image_preview = gr.Image(label="Image Preview")
         with gr.Column():
-            pdf_preview = gr.HTML(label="PDF Preview")
+            pdf_preview = gr.HTML(label="PDF Preview",value='<div style="border:1px solid #e0e0e0; padding:10px; height:235px;">PDF Preview</div>')
     
     with gr.Row():
         with gr.Column():
             file_input = gr.File(label="Upload a File (PDF/Image)")
             text_input = gr.Textbox(label="Ask a Question", placeholder="Enter your question")
-            submit_button = gr.Button("Submit")
+            submit_button = gr.Button("start")
 
     chat_history = gr.Chatbot(label="Chat History")
 
     file_input.change(preview_file, inputs=[file_input], outputs=[image_preview, pdf_preview])
+    file_input.clear(clear_file, outputs=[image_preview, pdf_preview])  # X 버튼 동작
+
+    
     submit_button.click(
         generate_response,  # 제너레이터 함수 사용
         inputs=[file_input, text_input, chat_history],
