@@ -2,12 +2,12 @@
 rtx 4090
 
 #pytorch
-torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118
-transformers==4.46.3
-vllm==0.6.4.post1
-gradio==5.7.0
-openai==1.55.2
-pyPDF2
+pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118
+pip install transformers==4.46.3
+pip install vllm==0.6.4.post1
+pip install gradio==5.7.0
+pip install openai==1.55.2
+pip install pyPDF2
 pip install spacy
 python -m spacy download ko_core_news_md
 python -m spacy download en_core_web_md
