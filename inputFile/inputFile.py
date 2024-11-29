@@ -27,4 +27,5 @@ def preview_file(file):
         with open(file.name, "rb") as pdf_file:
             base64_pdf = base64.b64encode(pdf_file.read()).decode("utf-8")
         pdf_preview = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="500px"></iframe>'
+        
         return None, pdf_preview  # Return PDF preview

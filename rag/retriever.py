@@ -2,7 +2,7 @@ import spacy
 from sentence_transformers import SentenceTransformer
 import faiss
 
-def chunk_text_with_overlap(text, chunk_size=500, overlap_size=100):
+def chunk_text_with_overlap(text, chunk_size=200, overlap_size=50):
     """
     Splits text into chunks of a specified number of characters with overlap.
     """
@@ -34,7 +34,8 @@ def chunk_text_with_overlap(text, chunk_size=500, overlap_size=100):
     return chunks
 
 def embedding_to_vector_store(chunks):
-    model = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    # model = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
     # Generate embeddings for the corpus
     corpus_embeddings = model.encode(chunks)
 
@@ -46,11 +47,9 @@ def embedding_to_vector_store(chunks):
     
     return model, index
 
-def retrieve_augmented_generation(text, question, k=3):
-    chunks = chunk_text_with_overlap(text)
-    model, index = embedding_to_vector_store(chunks)
+def retrieve_augmented_generation(chunks, sentence_embed_model, index, question, k=3):
     
-    query_embedding = model.encode([question])
+    query_embedding = sentence_embed_model.encode([question])
     _, indices = index.search(query_embedding, k)
     
     retrieved_chunks = [chunks[idx] for idx in indices[0]]
