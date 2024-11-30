@@ -54,9 +54,20 @@ def run_inference(client,
                 ],
             })
         
-    elif file_type == "pdf":        
+    elif file_type == "pdf":
+        prompt = f"""
+        You should answer the given papers and questions accurately and in detail.
+        If user ask about the algorithm of the paper,
+        please answer by thinking of the operation process of the algorithm as step by step based on the given context.
+        <question>
+        {question}
+        </question>
+        <context>
+        {retrieved_chunks}
+        </context>
+        """        
         messages.append({"role": "user", 
-                         "content": f"{question}\n\nFile Content:\n{retrieved_chunks}"})
+                         "content": prompt})
 
     elif file_type == 'text':
         messages.append({"role": "user", 
