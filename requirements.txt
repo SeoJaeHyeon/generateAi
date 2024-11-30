@@ -13,3 +13,5 @@ python -m spacy download ko_core_news_md
 python -m spacy download en_core_web_md
 pip install -U sentence-transformers
 pip install faiss-cpu
+pip install rank_bm25
+pip install nltk
