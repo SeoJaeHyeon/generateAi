@@ -1,22 +1,22 @@
 # generateAi
 **생성형 AI 응용 프로젝트 팀 D 서재현, 전지훈, 서재연**
 
-# vllm 실행 방법
+# 1. vllm 실행 방법
 ```
 serve llava-hf/llava-1.5-7b-hf --chat-template /vllm/template_llava.jinja --gpu-memory-utilization 0.6 --api-key token-abc123 --port 8000
 ```
 
-# 프로젝트 주제
+# 2. 프로젝트 주제
 - Text, image, document를 주고, 그에 대해 QA 할 수 있는 시스템
 
-# 프로젝트 개요
+# 3. 프로젝트 개요
 - vLLM을 이용해 Multimodal Large Language Model 모델 serving
 - 채팅이 가능하도록 이전 대화의 history를 모델에 반영
 - text에 대해 chain of thought 등과 같은 prompt engineering을 통해 답변 성능 향상
 - image로부터 얻고 싶은 정보에 대하여 prompt engineering을 통해 답변 성능 향상
 - user의 query에 대하여 document로부터 contextual chunking, embedding vector store, TF-IDF index, reranker를 이용한 retriever
 
-# text prompt
+# 4. text prompt
 ```
 "You are a logical puzzle expert. Solve the given puzzle step-by-step using logical reasoning. Provide a concise and clear final answer.
 
@@ -32,7 +32,7 @@ serve llava-hf/llava-1.5-7b-hf --chat-template /vllm/template_llava.jinja --gpu-
 **Puzzle:** {question}"
 ```
 
-# image prompt
+# 5. image prompt
 ```
 "You are an AI architecture assistant. Analyze the provided AI model diagram and answer these questions:
 
@@ -46,6 +46,6 @@ serve llava-hf/llava-1.5-7b-hf --chat-template /vllm/template_llava.jinja --gpu-
 Please provide clear and concise answers."
 ```
 
-# RAG Pipeline
+# 6. RAG Pipeline
 ![rag pipeline](https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F8f82c6175a64442ceff4334b54fac2ab3436a1d1-3840x2160.png&w=3840&q=75)
 
