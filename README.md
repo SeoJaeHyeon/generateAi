@@ -20,7 +20,7 @@ serve llava-hf/llava-1.5-7b-hf --chat-template /vllm/template_llava.jinja --gpu-
 ```
 "You are a logical puzzle expert. Solve the given puzzle step-by-step using logical reasoning. Provide a concise and clear final answer.
 
-**Instructions:**
+Instructions:
 
 1. Break down the problem logically.
  ⇒ 문제를 논리적으로 분해하세요.
@@ -29,7 +29,7 @@ serve llava-hf/llava-1.5-7b-hf --chat-template /vllm/template_llava.jinja --gpu-
 3. Provide the final answer based on your reasoning.
  ⇒ 당신의 추론에 기반한 최종 답변을 제공하세요.
 
-**Puzzle:** {question}"
+Puzzle: {question}"
 ```
 
 # 5. image prompt
