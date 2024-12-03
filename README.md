@@ -6,6 +6,9 @@
 serve llava-hf/llava-1.5-7b-hf --chat-template /vllm/template_llava.jinja --gpu-memory-utilization 0.6 --api-key token-abc123 --port 8000
 ```
 
+# 프로젝트 환경 및 모델
+![alt text](image.png)
+
 # 프로젝트 주제
 - Text, image, document를 주고, 그에 대해 QA 할 수 있는 시스템
 
