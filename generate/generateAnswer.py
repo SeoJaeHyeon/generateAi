@@ -88,3 +88,4 @@ def run_inference(client,
 
     # 결과 반환
     result = chat_completion.choices[0].message.content
+    return result
