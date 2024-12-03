@@ -39,11 +39,11 @@ def run_inference(client,
                 "text": """
                 You are an AI architecture assistant. Analyze the provided AI model diagram and answer these questions:
 
-                1. What is the input format?
+                1. Based on the model architecture shown, what is the nature of the input data and how is it processed initially?
                 2. What are the key components of the architecture?
-                3. What is the output format?
-
-                Use the diagram to provide clear and concise answers.
+                3. According to the image, what is the output of the model and how is it generated from the components?
+                
+                Please provide clear and concise answers.
                 """},
                 {"type": "image_url", 
                 "image_url": {"url": content}},
