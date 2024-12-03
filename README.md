@@ -49,3 +49,10 @@ Please provide clear and concise answers."
 # 6. RAG Pipeline
 ![rag pipeline](https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F8f82c6175a64442ceff4334b54fac2ab3436a1d1-3840x2160.png&w=3840&q=75)
 
+- Spacy를 이용해 토큰 단위로 overlap 하여 chunking
+- 각 chunk에 대하여 문서의 context를 삽입하여 contextual chunking
+- sentence transformer를 이용해 embedding 후 faiss vector store에 indexing
+- TF-IDF 기반의 BM25를 이용해 indexing
+- user의 query에 기반하여 embedding과 TF-IDF 각각에 대해 유사도 기준 top-3 추출
+- 총 6개의 chunk에 대해 reranker를 이용해 질문과 가장 유의미한 최종 chunk top-3 선정
+- 해당 chunk들을 model의 context에 넘겨주고, user query에 response
