@@ -32,38 +32,35 @@ def run_inference(client,
     # 파일 타입에 맞춰 프롬프트 생성
     if file_type == "image":
         content = f"data:image/jpeg;base64,{file_base64}"
+        prompt_text = f"""
+        You are an AI architecture assistant. Analyze the provided AI model diagram and provide a comprehensive explanation that includes the nature of the input data based on the model architecture shown and how it is processed initially, the key components of the architecture, and according to the image, what the output of the model is and how it is generated from the components.
+
+        Please present your answer as a single, cohesive paragraph without numbering or separating the points.
+        {question}
+        """
         messages.append({
             "role": "user",
             "content": [
                 {"type": "text", 
-                "text": """
-                You are an AI architecture assistant. Analyze the provided AI model diagram and answer these questions:
-
-                1. Based on the model architecture shown, what is the nature of the input data and how is it processed initially?
-                2. What are the key components of the architecture?
-                3. According to the image, what is the output of the model and how is it generated from the components?
-                
-                Please provide clear and concise answers.
-                """},
+                "text": prompt_text},
                 {"type": "image_url", 
-                "image_url": {"url": content}},
+                "image_url": {"url": content}}
             ],
         })
 
     elif file_type == "pdf":
         prompt = f"""
-        You should answer the given papers and questions accurately and in detail.
-        If user ask about the algorithm of the paper,
-        please answer by thinking of the operation process of the algorithm as step by step based on the given context.
+        You are an assistant specialized in understanding and analyzing research papers.
+        Answer the given question based on the provided paper excerpts and context.
+        If the question is about an algorithm, provide a step-by-step explanation.
         <question>
         {question}
         </question>
         <context>
         {retrieved_chunks}
         </context>
-        """        
-        messages.append({"role": "user", 
-                         "content": prompt})
+        """
+        messages.append({"role": "user", "content": prompt})
 
     elif file_type == 'text':
         # prompt of logical puzzle in text
