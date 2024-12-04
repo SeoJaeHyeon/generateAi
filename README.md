@@ -34,16 +34,29 @@ Puzzle: {question}"
 
 # 5. image prompt
 ```
-"You are an AI architecture assistant. Analyze the provided AI model diagram and answer these questions:
+'''
+You are an AI architecture assistant. (AI Architecture Assistant 역할 부여  -> 기술적이고 전문적인 답변을 기대)
+Analyze the provided AI model diagram and provide a comprehensive explanation 
+that includes the nature of the input data based on the model architecture shown 
+and how it is processed initially, the key components of the architecture, 
+and according to the image, what the output of the model is and how it is generated from the components.
 
-1. Based on the model architecture shown, what is the nature of the input data and how is it processed initially?
- ⇒ 표시된 모델 아키텍처를 기반으로, 입력 데이터의 성질은 무엇이며 초기에는 어떻게 처리되는가?
-2. What are the key components of the architecture?
- ⇒ 아키텍처의 주요 구성 요소가 무엇인가?
-3. According to the diagram, what is the output of the model and how is it generated from the components?
- ⇒ 이미지에 따르면, 모델의 출력은 무엇이며 그 구성 요소로부터 어떻게 생성되는가?
-
-Please provide clear and concise answers."
+Please present your answer as a single, cohesive paragraph without numbering or separating the points.
+{question}
+'''
+ '''
+ - 구체적인 분석 요청
+ - 프롬프트는 다음의 구체적인 분석 지시사항을 포함
+ - 입력 데이터의 특성과 모델 아키텍처의 초기 처리 방식 설명
+ - 모델 아키텍처의 주요 구성 요소 설명
+ - 이미지에 나타난 내용을 기반으로 모델 출력의 형태와 생성 과정을 설명
+ - CoT(Chain-of-Thought) 적용
+- 프롬프트를 통해 체계적으로 문제를 분석하고 답변을 구성하도록 유도
+- 입력 데이터의 특성과 초기 처리 방식 분석
+- 아키텍처 구성 요소의 역할과 관계 설명
+- 출력이 생성되는 과정 설명
+-이를 통해 모델이 한 번에 답을 생성하기보다는, 각 단계를 논리적으로 분석하고 연결 지어 답을 생성하도록 설계
+'''
 ```
 
 # 6. RAG Pipeline

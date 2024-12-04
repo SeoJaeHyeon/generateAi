@@ -33,7 +33,11 @@ def run_inference(client,
     if file_type == "image":
         content = f"data:image/jpeg;base64,{file_base64}"
         prompt_text = f"""
-        You are an AI architecture assistant. Analyze the provided AI model diagram and provide a comprehensive explanation that includes the nature of the input data based on the model architecture shown and how it is processed initially, the key components of the architecture, and according to the image, what the output of the model is and how it is generated from the components.
+        You are an AI architecture assistant. 
+        Analyze the provided AI model diagram and provide a comprehensive explanation 
+        that includes the nature of the input data based on the model architecture shown 
+        and how it is processed initially, the key components of the architecture, 
+        and according to the image, what the output of the model is and how it is generated from the components.
 
         Please present your answer as a single, cohesive paragraph without numbering or separating the points.
         {question}
